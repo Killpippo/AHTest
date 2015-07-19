@@ -1,0 +1,102 @@
+﻿@model IEnumerable<AuctionHouseModels.Item>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@if (!(System.Web.HttpContext.Current.User != null && System.Web.HttpContext.Current.User.Identity.IsAuthenticated))
+{
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AuctionExpiry)
+        </th>
+        <th>Bid Status</th>
+        <th></th>
+    </tr>
+
+    @*@if (ViewData["STATUS_" + item.ID] == AuctionHouse.Controllers.AHItemController.eBuyerBidStatus.BuyerHigherBid.ToString()){
+            <tr class="row warning" >
+        }
+        else {
+            <tr class="row warning">
+        }*@
+
+@foreach (var item in Model)
+{
+    <tr bgcolor="@ViewData["BG_" + item.ID]">
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+
+        @if (item.AuctionEnabled)
+        {
+            <td>
+                @Html.DisplayFor(modelItem => item.AuctionExpiry)
+            </td>
+        }
+        else
+        {
+            <td>
+                <p>Auction has not started yet</p>
+            </td>
+        }
+
+        <td>
+            @if (System.Web.HttpContext.Current.User != null && System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                if (item.AuctionEnabled)
+                {
+                    if (ViewData["STATUS_" + item.ID] == AuctionHouse.Controllers.AHItemController.eBuyerBidStatus.BuyerHighestBid.ToString())
+                    {
+                        <p>Your bid is winning</p>
+                    }
+                    else if (ViewData["STATUS_" + item.ID] == AuctionHouse.Controllers.AHItemController.eBuyerBidStatus.BuyerOutbidded.ToString())
+                    {
+                        <p>You were outbid!</p>
+                    }
+                    else if (ViewData["STATUS_" + item.ID] == AuctionHouse.Controllers.AHItemController.eBuyerBidStatus.OtherBuyerBid.ToString())
+                    {
+                        <p>Other buyers are interested in this item</p>
+                    }
+                    else
+                    {
+                        <p>No bids on this item yet</p>
+                    }
+                }
+            }
+            else
+            {
+                <p>Bid count: @ViewData["COUNT_" + item.ID]</p>
+            }
+        </td>
+
+        <td>
+            @if (System.Web.HttpContext.Current.User != null && System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                @Html.ActionLink("Details", "Details", new { id = item.ID })
+            }
+            else
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID })
+            }
+        </td>
+    </tr>
+}
+
+</table>

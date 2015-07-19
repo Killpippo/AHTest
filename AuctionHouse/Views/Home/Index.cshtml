@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Auctionata Coding exercise</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Buyer Area</h2>
+        @if (System.Web.HttpContext.Current.User != null && System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+        {
+            <p>
+                You are logged in as a buyer.
+            </p>
+            <p class="btn btn-default">@Html.ActionLink("Log out", "Logout", "AHBuyer")</p>
+        }
+        else
+        {
+            <p>
+                Enter this area if you are a buyer.<br />You can search for items to bid, to check and to put your bids
+            </p>
+            <p class="btn btn-default">@Html.ActionLink("Log in", "Login", "AHBuyer")</p>
+        }
+    </div>
+    <div class="col-md-4">
+        @if (System.Web.HttpContext.Current.User != null && System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+        {
+            <h2>Auction Area</h2>
+            <p>
+                Check and make your bids
+            </p>
+        }
+        else
+        {
+            <h2>Shop Area</h2>
+            <p>
+                Enter this area if you are the seller.<br />You can check, add and modify items, you can start the auction of an item<br />This area is available if you are not logged in as a buyer
+            </p>
+        }
+        <p class="btn btn-default">@Html.ActionLink("Items Management", "Index", "AHItem")</p>
+    </div>
+</div>
